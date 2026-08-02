@@ -1,0 +1,66 @@
+:root {
+  --primary-blue: #1d3557;
+  --accent-maroon: #781119;
+  --highlight-gold: #f1c40f;
+  --bg-cream: #f1faee;
+  --text-dark: #212529;
+
+  --font-heading: Georgia, "Times New Roman", serif;
+  --font-body: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-cream);
+  color: var(--text-dark);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.landing {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  background-color: var(--primary-blue);
+  color: var(--bg-cream);
+}
+
+.landing h1 {
+  font-family: var(--font-heading);
+  color: var(--highlight-gold);
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.landing .tagline {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.landing .status {
+  font-size: 0.9rem;
+  color: var(--bg-cream);
+  border: 1px solid var(--highlight-gold);
+  border-radius: 999px;
+  padding: 0.5rem 1.25rem;
+  display: inline-block;
+}
+
+footer {
+  background-color: var(--accent-maroon);
+  color: var(--bg-cream);
+  text-align: center;
+  font-size: 0.8rem;
+  padding: 1rem;
+}
