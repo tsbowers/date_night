@@ -1,19 +1,26 @@
-// src/js/eventsApi.mjs
 import { getCachedData, setCachedData } from './utils.mjs';
 
-// Paste ONLY your Consumer Key string here (no https:// or links)
 const TICKETMASTER_KEY = 'qygDCWISyVEJqT6HkZpoylb9b83ACWMA'; 
 
-export async function fetchLocalEvents(params = { lat: 40.7128, lon: -74.0060, radius: 50 }) {
-  const cacheKey = `tm_events_v3_${params.lat}_${params.lon}`;
+const DEFAULT_LAT = 40.7128;
+const DEFAULT_LON = -74.0060;
+
+export async function fetchLocalEvents(params = {}) {
+  const lat = params.lat || DEFAULT_LAT;
+  const lon = params.lon || DEFAULT_LON;
+  const radius = params.radius || 50;
+
+  const roundedLat = Number(lat).toFixed(2);
+  const roundedLon = Number(lon).toFixed(2);
+  const cacheKey = `tm_events_geo_${roundedLat}_${roundedLon}`;
   
   const cached = getCachedData(cacheKey);
   if (cached && cached.length > 0) return cached;
 
   const queryParams = new URLSearchParams({
     apikey: TICKETMASTER_KEY,
-    geoPoint: `${params.lat},${params.lon}`,
-    radius: params.radius,
+    geoPoint: `${lat},${lon}`,
+    radius: radius,
     unit: 'miles',
     size: 20,
     sort: 'date,asc'

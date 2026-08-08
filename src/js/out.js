@@ -30,15 +30,48 @@ function eventCardTemplate(event) {
   `;
 }
 
+// Helper function to get the user's current GPS location
+function getUserLocation() {
+  return new Promise((resolve) => {
+    if (!navigator.geolocation) {
+      console.warn('Geolocation is not supported by this browser.');
+      resolve(null);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        resolve({
+          lat: position.coords.latitude,
+          lon: position.coords.longitude
+        });
+      },
+      (error) => {
+        console.warn('Geolocation access denied or failed:', error.message);
+        resolve(null); // Fallback to default coordinates inside eventsApi
+      },
+      { timeout: 8000 }
+    );
+  });
+}
+
 async function displayEvents() {
   const container = document.getElementById('events-grid');
   if (!container) return;
 
+  container.innerHTML = '<p style="color: var(--warm-cream);">Detecting your location...</p>';
+
   try {
-    const events = await fetchLocalEvents({ lat: 40.7128, lon: -74.0060, radius: 50 });
+    // 1. Request user's coordinates
+    const userCoords = await getUserLocation();
+
+    // 2. Pass user location if available, otherwise fetchLocalEvents uses default fallback
+    const events = userCoords 
+      ? await fetchLocalEvents({ lat: userCoords.lat, lon: userCoords.lon, radius: 50 })
+      : await fetchLocalEvents();
 
     if (!events || events.length === 0) {
-      container.innerHTML = '<p class="no-results">No local events found.</p>';
+      container.innerHTML = '<p class="no-results">No local events found in your area right now.</p>';
       return;
     }
 
