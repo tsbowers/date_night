@@ -1,16 +1,11 @@
-// src/js/out.js
 import { fetchLocalEvents } from './eventsApi.mjs';
 import { loadHeaderFooter, renderListWithTemplate } from './utils.mjs';
 
 document.addEventListener('DOMContentLoaded', async () => {
-  // 1. Load partials
   await loadHeaderFooter();
-
-  // 2. Load events list
   await displayEvents();
 });
 
-// Template function for individual event cards
 function eventCardTemplate(event) {
   return `
     <article class="event-card">
@@ -46,7 +41,6 @@ async function displayEvents() {
       return;
     }
 
-    // Render list using helper from utils.mjs
     renderListWithTemplate(eventCardTemplate, container, events, 'afterbegin', true);
   } catch (error) {
     console.error('Error rendering events page:', error);
