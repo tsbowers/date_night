@@ -1,25 +1,65 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Date Night Planner | Stay In</title>
-    <link rel="stylesheet" href="/css/style.css" />
-    <script type="module" src="/js/in.js"></script>
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Date Night Planner | Home</title>
+  
+  <!-- Logo PDF as Favicon -->
+  <link rel="icon" type="application/pdf" href="/logo.pdf" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  
+  <!-- Header / Navigation -->
+  <header>
+    <a href="/index.html" class="logo-container">
+      <object data="/logo.pdf" type="application/pdf" class="logo-img" aria-label="Logo">
+        <img src="/logo.pdf" alt="Date Night Planner Logo" class="logo-img" />
+      </object>
+      <span class="site-title">Date Night Planner</span>
+    </a>
+    <nav>
+      <a href="/index.html" class="active">Home</a>
+      <a href="/out/index.html">Go Out</a>
+      <a href="/in/index.html">Stay In</a>
+    </nav>
+  </header>
 
-  <body>
-    <header class="divider" id="main-header"></header>
+  <!-- Main Content: Stacked Spotlights -->
+  <main>
+    <section class="spotlight-stack">
+      
+      <!-- TOP: Go Out Spotlight -->
+      <article class="spotlight-card out-spotlight">
+        <div class="spotlight-badge">Featured Event — Go Out</div>
+        <div class="spotlight-content" id="out-spotlight-target">
+          <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600&auto=format&fit=crop" alt="Live Event" />
+          <h3>Local Jazz & Dining Evening</h3>
+          <p>Discover vibrant local concerts, food markets, and outdoor activities near you.</p>
+          <a href="/out/index.html" class="btn">Explore Out Options</a>
+        </div>
+      </article>
 
-    <main class="page page--in">
-      <h2>Stay In</h2>
-      <p class="page__intro">
-        Browse trending movies and shows and see where to stream them.
-      </p>
+      <!-- BOTTOM: Stay In Spotlight -->
+      <article class="spotlight-card in-spotlight">
+        <div class="spotlight-badge">Featured Movie — Stay In</div>
+        <div class="spotlight-content" id="in-spotlight-target">
+          <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600&auto=format&fit=crop" alt="Movie Night" />
+          <h3>Trending Streaming Night</h3>
+          <p>Find top-rated movies and shows currently streaming on your favorite platforms.</p>
+          <a href="/in/index.html" class="btn btn-accent">Explore In Options</a>
+        </div>
+      </article>
 
-      <ul class="movie-list"></ul>
-    </main>
+    </section>
+  </main>
 
-    <footer id="main-footer"></footer>
-  </body>
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2026 Date Night Planner | WDD 330</p>
+  </footer>
+
+  <script type="module" src="/js/main.js"></script>
+</body>
 </html>

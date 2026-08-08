@@ -1,12 +1,14 @@
 :root {
-  --primary-blue: #1d3557;
-  --accent-maroon: #781119;
-  --highlight-gold: #f1c40f;
-  --bg-cream: #f1faee;
-  --text-dark: #212529;
+  /* Palette from Specification */
+  --sapphire-blue: #1D3557; /* Icon bg, standard buttons, headers */
+  --maroon: #781119;        /* Button accent */
+  --soft-gold: #F1C40F;     /* Highlights */
+  --soft-cream: #F1FAEE;    /* Body background */
+  --charcoal-gray: #212529; /* Text & outline */
+  --white: #FFFFFF;
 
-  --font-heading: Georgia, "Times New Roman", serif;
-  --font-body: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  --font-heading: 'Georgia', serif;
+  --font-body: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 * {
@@ -16,181 +18,157 @@
 }
 
 body {
-  background-color: var(--bg-cream);
-  color: var(--text-dark);
+  background-color: var(--soft-cream);
+  color: var(--charcoal-gray);
   font-family: var(--font-body);
+  line-height: 1.6;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-/* Header / nav */
+/* Header & Logo */
 header {
+  background-color: var(--sapphire-blue);
+  color: var(--soft-cream);
+  padding: 0.75rem 2rem;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
   gap: 0.75rem;
-  padding: 1rem 1.5rem;
-  background-color: var(--primary-blue);
+  text-decoration: none;
 }
 
-.logo a {
+.logo-img {
+  height: 48px;
+  width: auto;
+}
+
+.site-title {
   font-family: var(--font-heading);
-  font-size: 1.4rem;
-  color: var(--bg-cream);
+  color: var(--soft-gold);
+  font-size: 1.5rem;
+}
+
+nav a {
+  color: var(--soft-cream);
   text-decoration: none;
+  margin-left: 1.5rem;
+  font-weight: 600;
+  transition: color 0.2s ease, border-bottom 0.2s ease;
 }
 
-.highlight {
-  color: var(--highlight-gold);
+nav a:hover, nav a.active {
+  color: var(--soft-gold);
+  border-bottom: 2px solid var(--soft-gold);
 }
 
-.main-nav {
-  display: flex;
-  gap: 1.25rem;
-}
-
-.main-nav a {
-  color: var(--bg-cream);
-  text-decoration: none;
-  font-size: 0.95rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  transition: color 0.2s ease;
-}
-
-.main-nav a:hover,
-.main-nav a:focus-visible {
-  color: var(--highlight-gold);
-}
-
-/* Landing page */
-.landing {
+/* Main Container Layout */
+main {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 2rem;
-  background-color: var(--primary-blue);
-  color: var(--bg-cream);
-}
-
-.hero-content h1 {
-  font-family: var(--font-heading);
-  color: var(--highlight-gold);
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.hero-content .tagline {
-  font-size: 1.1rem;
-  margin-bottom: 2rem;
-}
-
-/* Spotlight cards */
-.spotlight-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  justify-content: center;
-  width: 100%;
-  max-width: 700px;
-}
-
-.spotlight {
-  position: relative;
-  flex: 1 1 260px;
-  min-height: 220px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  border-radius: 12px;
-  overflow: hidden;
-  background-color: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(241, 196, 15, 0.3);
-  transition:
-    transform 0.25s ease,
-    border-color 0.25s ease;
-}
-
-.spotlight__glow {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    circle at 50% 30%,
-    rgba(241, 196, 15, 0.35),
-    transparent 65%
-  );
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.spotlight--in .spotlight__glow {
-  background: radial-gradient(
-    circle at 50% 30%,
-    rgba(120, 17, 25, 0.55),
-    transparent 65%
-  );
-}
-
-.spotlight:hover,
-.spotlight:focus-visible {
-  transform: translateY(-6px);
-  border-color: var(--highlight-gold);
-}
-
-.spotlight:hover .spotlight__glow,
-.spotlight:focus-visible .spotlight__glow {
-  opacity: 1;
-}
-
-.spotlight__label {
-  position: relative;
-  font-family: var(--font-heading);
-  font-size: 1.8rem;
-  color: var(--highlight-gold);
-  z-index: 1;
-}
-
-.spotlight__sub {
-  position: relative;
-  font-size: 0.9rem;
-  color: var(--bg-cream);
-  margin-top: 0.5rem;
-  z-index: 1;
-  opacity: 0.85;
-}
-
-/* Go Out / Stay In page shells */
-.page {
-  flex: 1;
+  padding: 2rem 1rem;
   max-width: 900px;
   margin: 0 auto;
-  padding: 2rem 1.5rem;
   width: 100%;
 }
 
-.page h2 {
+/* Stacked Spotlights for Landing Page */
+.spotlight-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+  margin-top: 1rem;
+}
+
+.spotlight-card {
+  background-color: var(--white);
+  border: 2px solid var(--sapphire-blue);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 650px;
+  overflow: hidden;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+}
+
+.spotlight-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.spotlight-badge {
+  background-color: var(--sapphire-blue);
+  color: var(--soft-gold);
   font-family: var(--font-heading);
-  color: var(--primary-blue);
+  text-transform: uppercase;
+  font-weight: bold;
+  padding: 0.5rem;
+  letter-spacing: 1px;
+}
+
+.spotlight-card.in-spotlight .spotlight-badge {
+  background-color: var(--maroon);
+}
+
+.spotlight-content {
+  padding: 1.5rem;
+}
+
+.spotlight-content img {
+  width: 100%;
+  max-height: 280px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+.spotlight-content h3 {
+  font-family: var(--font-heading);
+  color: var(--sapphire-blue);
+  font-size: 1.5rem;
   margin-bottom: 0.5rem;
 }
 
-.page__intro {
-  color: var(--text-dark);
-  margin-bottom: 1.5rem;
+/* Buttons */
+.btn {
+  display: inline-block;
+  background-color: var(--sapphire-blue);
+  color: var(--soft-cream);
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
+.btn:hover {
+  background-color: var(--maroon);
+}
+
+.btn-accent {
+  background-color: var(--maroon);
+}
+
+.btn-accent:hover {
+  background-color: var(--sapphire-blue);
+}
+
+/* Footer */
 footer {
-  background-color: var(--accent-maroon);
-  color: var(--bg-cream);
+  background-color: var(--sapphire-blue);
+  color: var(--soft-cream);
   text-align: center;
-  font-size: 0.8rem;
-  padding: 1rem;
+  padding: 1.25rem;
+  margin-top: auto;
 }
