@@ -1,6 +1,6 @@
 import { getCachedData, setCachedData } from './utils.mjs';
 
-const TICKETMASTER_KEY = 'https://developer-account.ticketmaster.com/user/reset/106058/1786231828/nksqvYrlcPU8sfU9_7vEwtZqle6iZIRx14F_EyqPUYQ'; 
+const TICKETMASTER_KEY = 'qygDCWISyVEJqT6HkZpoylb9b83ACWMA';
 
 export async function fetchLocalEvents(params = { lat: 40.7128, lon: -74.0060, radius: 50 }) {
   const cacheKey = `tm_events_v2_${params.lat}_${params.lon}`;
