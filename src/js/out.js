@@ -34,16 +34,17 @@ async function displayEvents() {
   if (!container) return;
 
   try {
-    const events = await fetchLocalEvents();
+    // Calling NYC coordinates specifically (New York City)
+    const events = await fetchLocalEvents({ lat: 40.7128, lon: -74.0060, radius: 100 });
 
     if (!events || events.length === 0) {
-      container.innerHTML = '<p class="no-results">No local events found in your area right now.</p>';
+      container.innerHTML = '<p class="no-results">No local events found.</p>';
       return;
     }
 
     renderListWithTemplate(eventCardTemplate, container, events, 'afterbegin', true);
   } catch (error) {
     console.error('Error rendering events page:', error);
-    container.innerHTML = '<p class="error-msg">Failed to load local events. Please try again later.</p>';
+    container.innerHTML = '<p class="error-msg">Failed to load local events.</p>';
   }
 }
