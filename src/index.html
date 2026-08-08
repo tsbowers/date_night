@@ -9,17 +9,27 @@
     <script type="module" src="/js/in.js"></script>
   </head>
 
-  <body>
-    <header id="main-header"></header>
+ <main>
+  <div class="spotlight-stack">
+    
+    <!-- Top Card: Go Out API Spotlight -->
+    <article class="spotlight-card out-spotlight">
+      <div class="spotlight-badge">Featured Date — Go Out</div>
+      <div class="spotlight-content" id="out-spotlight-target">
+        <!-- Dynamically rendered via main.js & eventsApi.mjs -->
+      </div>
+    </article>
 
-    <main class="page page--in">
-      <h2>Stay In</h2>
-      <p class="page__intro">
-        Browse trending movies and shows and see where to stream them.
-      </p>
+    <!-- Bottom Card: Stay In API Spotlight -->
+    <article class="spotlight-card in-spotlight">
+      <div class="spotlight-badge">Featured Date — Stay In</div>
+      <div class="spotlight-content" id="in-spotlight-target">
+        <!-- Dynamically rendered via main.js & streamingApi.mjs -->
+      </div>
+    </article>
 
-      <ul class="movie-list"></ul>
-    </main>
+  </div>
+</main>
 
     <footer id="main-footer"></footer>
   </body>
