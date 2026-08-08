@@ -24,7 +24,7 @@ export async function fetchLocalEvents(params = { lat: 43.826, lon: -111.789, ra
       'x-rapidapi-host': HOST
     }
   };
-
+ 
   try {
     const response = await fetch(url, options);
     if (!response.ok) throw new Error(`Events API error: ${response.status}`);
