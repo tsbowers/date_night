@@ -1,23 +1,23 @@
-// src/js/eventsApi.mjs
 import { getCachedData, setCachedData } from './utils.mjs';
 
 const RAPID_API_KEY = '8f5afc3d5amsh8598cd8e8df1036p1bb319jsn1be134821cab';
-const HOST = 'lotadata-events-v1.p.rapidapi.com'; // Corrected host
+const HOST = 'lotadata-events-v1.p.rapidapi.com';
 
 export async function fetchLocalEvents(params = { lat: 40.7128, lon: -74.0060, radius: 50 }) {
-  const cacheKey = `events_v3_${params.lat}_${params.lon}`;
+  const cacheKey = `lotadata_v1_${params.lat}_${params.lon}`;
   
   const cached = getCachedData(cacheKey);
   if (cached && cached.length > 0) return cached;
 
+  // Lotadata uses 'lat', 'long' (or 'lon'), and 'radius' directly on the root path
   const queryParams = new URLSearchParams({
     lat: params.lat,
-    lon: params.lon,
+    long: params.lon,
     radius: params.radius
   });
 
-  // Updated URL path from /events to /events/search
-  const url = `https://${HOST}/events/search?${queryParams.toString()}`;
+  // Base URL is root / instead of /events/search
+  const url = `https://${HOST}/?${queryParams.toString()}`;
   
   const options = {
     method: 'GET',
@@ -34,7 +34,7 @@ export async function fetchLocalEvents(params = { lat: 40.7128, lon: -74.0060, r
     if (!response.ok) {
       const errorMsg = await response.text();
       console.error('API Error details:', errorMsg);
-      return []; // Return empty array so we know real data failed
+      return [];
     }
     
     const result = await response.json();
