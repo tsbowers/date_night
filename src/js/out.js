@@ -18,11 +18,12 @@ function eventCardTemplate(event) {
         <p class="event-meta">
           <span>📅 ${event.startDate}</span> • <span>🏷️ ${event.price}</span>
         </p>
+        <p class="event-address">📍 ${event.address}</p>
         <p class="event-description">
-          ${event.description ? event.description.substring(0, 110) : 'No description provided.'}...
+          ${event.description ? event.description.substring(0, 100) : 'No description provided.'}...
         </p>
         <a href="${event.url}" target="_blank" rel="noopener noreferrer" class="btn">
-          View Event Details
+          Get Tickets / Details
         </a>
       </div>
     </article>
@@ -34,8 +35,7 @@ async function displayEvents() {
   if (!container) return;
 
   try {
-    // Calling NYC coordinates specifically (New York City)
-    const events = await fetchLocalEvents({ lat: 40.7128, lon: -74.0060, radius: 100 });
+    const events = await fetchLocalEvents({ lat: 40.7128, lon: -74.0060, radius: 50 });
 
     if (!events || events.length === 0) {
       container.innerHTML = '<p class="no-results">No local events found.</p>';
