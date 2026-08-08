@@ -1,6 +1,6 @@
 import { getCachedData, setCachedData } from './utils.mjs';
 
-const RAPID_API_KEY = 'YOUR_RAPID_API_KEY'; // Replace with your RapidAPI key
+const RAPID_API_KEY = '8f5afc3d5amsh8598cd8e8df1036p1bb319jsn1be134821cab';
 const HOST = 'global-hyper-local-events.p.rapidapi.com';
 
 export async function fetchLocalEvents(params = { lat: 43.826, lon: -111.789, radius: 25 }) {
