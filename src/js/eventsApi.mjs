@@ -1,9 +1,11 @@
+// src/js/eventsApi.mjs
 import { getCachedData, setCachedData } from './utils.mjs';
 
-const TICKETMASTER_KEY = 'qygDCWISyVEJqT6HkZpoylb9b83ACWMA';
+// Paste ONLY your Consumer Key string here (no https:// or links)
+const TICKETMASTER_KEY = 'qygDCWISyVEJqT6HkZpoylb9b83ACWMA'; 
 
 export async function fetchLocalEvents(params = { lat: 40.7128, lon: -74.0060, radius: 50 }) {
-  const cacheKey = `tm_events_v2_${params.lat}_${params.lon}`;
+  const cacheKey = `tm_events_v3_${params.lat}_${params.lon}`;
   
   const cached = getCachedData(cacheKey);
   if (cached && cached.length > 0) return cached;
@@ -24,7 +26,7 @@ export async function fetchLocalEvents(params = { lat: 40.7128, lon: -74.0060, r
     console.log('Ticketmaster Response Status:', response.status);
 
     if (!response.ok) {
-      console.warn(`Ticketmaster returned HTTP ${response.status}. Please ensure TICKETMASTER_KEY is set.`);
+      console.warn(`Ticketmaster returned HTTP ${response.status}.`);
       return getFallbackEvents();
     }
     
