@@ -1,7 +1,9 @@
-import { fetchLocalEvents } from './eventsApi.mjs';
+import { fetchLocalEvents } from './eventsApi.mjs'; 
 import { fetchTrendingStreaming } from './streamingApi.mjs';
+import { loadHeaderFooter } from './utils.mjs';
 
 document.addEventListener('DOMContentLoaded', async () => {
+  await loadHeaderFooter();
   await loadSpotlights();
 });
 
@@ -21,7 +23,7 @@ async function loadSpotlights() {
         <img src="${randomEvent.image}" alt="${randomEvent.title}" />
         <h3>${randomEvent.title}</h3>
         <p><strong>Category:</strong> ${randomEvent.category} | <strong>Price:</strong> ${randomEvent.price}</p>
-        <p>${randomEvent.description.substring(0, 120)}...</p>
+        <p>${randomEvent.description ? randomEvent.description.substring(0, 120) : 'Check out this event for your next date night.'}...</p>
         <a href="/out/index.html" class="btn">Explore Going Out</a>
       `;
     } else {
@@ -45,7 +47,7 @@ async function loadSpotlights() {
         <img src="${randomMovie.image}" alt="${randomMovie.title}" />
         <h3>${randomMovie.title} (${randomMovie.releaseYear})</h3>
         <p><strong>Rating:</strong> ⭐ ${randomMovie.rating} | <strong>Platform:</strong> ${randomMovie.streamingPlatform}</p>
-        <p>${randomMovie.description.substring(0, 120)}...</p>
+        <p>${randomMovie.description ? randomMovie.description.substring(0, 120) : 'A great choice for a cozy night in.'}...</p>
         <a href="/in/index.html" class="btn btn-accent">Explore Staying In</a>
       `;
     } else {
