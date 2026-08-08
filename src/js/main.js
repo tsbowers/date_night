@@ -1,8 +1,7 @@
-import { getSavedPlans } from './utils.mjs';
+import { loadHeaderFooter } from "./utils.mjs";
 
-document.addEventListener('DOMContentLoaded', () => {
-  initSpotlights();
-});
+loadHeaderFooter();
+initSpotlights();
 
 function initSpotlights() {
   // Sample pool for rotating "Go Out" options

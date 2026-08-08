@@ -1,14 +1,16 @@
-:root {
-  /* Palette from Specification */
-  --sapphire-blue: #1D3557; /* Icon bg, standard buttons, headers */
-  --maroon: #781119;        /* Button accent */
-  --soft-gold: #F1C40F;     /* Highlights */
-  --soft-cream: #F1FAEE;    /* Body background */
-  --charcoal-gray: #212529; /* Text & outline */
-  --white: #FFFFFF;
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&display=swap");
 
-  --font-heading: 'Georgia', serif;
-  --font-body: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+:root {
+  /* Palette from the project proposal */
+  --deep-plum: #3a2e39; /* headers, primary text, nav bg */
+  --dusty-rose: #b75d69; /* primary accent, buttons, active filters */
+  --warm-cream: #fbf3ef; /* page and card backgrounds */
+  --antique-gold: #c9a227; /* dividers, small accents */
+  --charcoal-grey: #6b6b6b; /* secondary / meta text */
+  --white: #ffffff;
+
+  --font-heading: "Playfair Display", Georgia, serif;
+  --font-body: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 * {
@@ -18,8 +20,8 @@
 }
 
 body {
-  background-color: var(--soft-cream);
-  color: var(--charcoal-gray);
+  background-color: var(--warm-cream);
+  color: var(--deep-plum);
   font-family: var(--font-body);
   line-height: 1.6;
   min-height: 100vh;
@@ -29,13 +31,15 @@ body {
 
 /* Header & Logo */
 header {
-  background-color: var(--sapphire-blue);
-  color: var(--soft-cream);
+  background-color: var(--deep-plum);
+  color: var(--warm-cream);
   padding: 0.75rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
 .logo-container {
@@ -47,78 +51,152 @@ header {
 
 .logo-img {
   height: 48px;
-  width: auto;
+  width: 48px;
+  border-radius: 10px;
+  object-fit: cover;
 }
 
 .site-title {
   font-family: var(--font-heading);
-  color: var(--soft-gold);
-  font-size: 1.5rem;
+  color: var(--antique-gold);
+  font-size: 1.4rem;
 }
 
 nav a {
-  color: var(--soft-cream);
+  color: var(--warm-cream);
   text-decoration: none;
   margin-left: 1.5rem;
-  font-weight: 600;
-  transition: color 0.2s ease, border-bottom 0.2s ease;
+  font-weight: 500;
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
 }
 
-nav a:hover, nav a.active {
-  color: var(--soft-gold);
-  border-bottom: 2px solid var(--soft-gold);
+nav a:hover,
+nav a:focus-visible,
+nav a.active {
+  color: var(--antique-gold);
+  border-bottom-color: var(--antique-gold);
 }
 
 /* Main Container Layout */
 main {
   flex: 1;
-  padding: 2rem 1rem;
+  padding: 2.5rem 1rem;
   max-width: 900px;
   margin: 0 auto;
   width: 100%;
 }
 
-/* Stacked Spotlights for Landing Page */
+.page-intro {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.page-intro h1 {
+  font-family: var(--font-heading);
+  color: var(--deep-plum);
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.page-intro p {
+  color: var(--charcoal-grey);
+}
+
+/* Stacked, centered spotlights on the landing page: Go Out on top, Stay In below */
 .spotlight-stack {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2.5rem;
-  margin-top: 1rem;
+  margin: 0 auto;
+  max-width: 650px;
 }
 
 .spotlight-card {
-  background-color: var(--white);
-  border: 2px solid var(--sapphire-blue);
-  border-radius: 12px;
+  position: relative;
+  isolation: isolate;
+  background-color: var(--deep-plum);
+  border-radius: 14px;
   width: 100%;
-  max-width: 650px;
   overflow: hidden;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 8px 20px rgba(58, 46, 57, 0.35);
   text-align: center;
+  opacity: 0;
+  animation: spotlight-in 0.6s ease forwards;
 }
 
-.spotlight-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+.out-spotlight {
+  animation-delay: 0.1s;
+}
+
+.in-spotlight {
+  animation-delay: 0.35s;
+}
+
+/* Slowly rotating light beam behind each card's content, evoking a stage spotlight */
+.spotlight-card::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  z-index: 0;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(201, 162, 39, 0.4) 25deg,
+    transparent 70deg,
+    transparent 360deg
+  );
+  animation: spotlight-rotate 9s linear infinite;
+  pointer-events: none;
+}
+
+.in-spotlight::before {
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(183, 93, 105, 0.45) 25deg,
+    transparent 70deg,
+    transparent 360deg
+  );
+}
+
+.spotlight-card:hover,
+.spotlight-card:focus-within {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 28px rgba(58, 46, 57, 0.45);
+}
+
+.spotlight-card {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .spotlight-badge {
-  background-color: var(--sapphire-blue);
-  color: var(--soft-gold);
+  position: relative;
+  z-index: 1;
+  background-color: var(--antique-gold);
+  color: var(--deep-plum);
   font-family: var(--font-heading);
   text-transform: uppercase;
   font-weight: bold;
+  font-size: 0.85rem;
   padding: 0.5rem;
   letter-spacing: 1px;
 }
 
-.spotlight-card.in-spotlight .spotlight-badge {
-  background-color: var(--maroon);
+.in-spotlight .spotlight-badge {
+  background-color: var(--dusty-rose);
+  color: var(--warm-cream);
 }
 
 .spotlight-content {
+  position: relative;
+  z-index: 1;
   padding: 1.5rem;
 }
 
@@ -126,22 +204,56 @@ main {
   width: 100%;
   max-height: 280px;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 8px;
   margin-bottom: 1rem;
 }
 
 .spotlight-content h3 {
   font-family: var(--font-heading);
-  color: var(--sapphire-blue);
+  color: var(--warm-cream);
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
+}
+
+.spotlight-content p {
+  color: rgba(251, 243, 239, 0.85);
+}
+
+@keyframes spotlight-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spotlight-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spotlight-card {
+    animation: none;
+    opacity: 1;
+  }
+  .spotlight-card::before {
+    animation: none;
+  }
 }
 
 /* Buttons */
 .btn {
   display: inline-block;
-  background-color: var(--sapphire-blue);
-  color: var(--soft-cream);
+  background-color: var(--antique-gold);
+  color: var(--deep-plum);
   padding: 0.75rem 1.5rem;
   border-radius: 6px;
   text-decoration: none;
@@ -149,25 +261,42 @@ main {
   border: none;
   cursor: pointer;
   margin-top: 1rem;
-  transition: background-color 0.2s ease, transform 0.1s ease;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
 }
 
 .btn:hover {
-  background-color: var(--maroon);
+  background-color: var(--dusty-rose);
+  color: var(--warm-cream);
 }
 
 .btn-accent {
-  background-color: var(--maroon);
+  background-color: var(--dusty-rose);
+  color: var(--warm-cream);
 }
 
 .btn-accent:hover {
-  background-color: var(--sapphire-blue);
+  background-color: var(--antique-gold);
+  color: var(--deep-plum);
+}
+
+/* Go Out / Stay In page shells */
+.page h2 {
+  font-family: var(--font-heading);
+  color: var(--deep-plum);
+  margin-bottom: 0.5rem;
+}
+
+.page__intro {
+  color: var(--charcoal-grey);
+  margin-bottom: 1.5rem;
 }
 
 /* Footer */
 footer {
-  background-color: var(--sapphire-blue);
-  color: var(--soft-cream);
+  background-color: var(--deep-plum);
+  color: var(--warm-cream);
   text-align: center;
   padding: 1.25rem;
   margin-top: auto;
