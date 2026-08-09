@@ -13,6 +13,22 @@
   --font-body: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--warm-cream);
+  color: var(--white);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 /* Accessibility utilities */
 .visually-hidden {
   position: absolute;
@@ -41,50 +57,6 @@
 
 .skip-link:focus {
   top: 0;
-}
-
-/* Watch-provider button on movie cards */
-.watch-btn {
-  margin-top: 0.75rem;
-  font-size: 0.85rem;
-  padding: 0.5rem 1rem;
-}
-
-.watch-providers {
-  margin-top: 0.5rem;
-}
-
-.providers-list {
-  font-size: 0.85rem;
-  color: var(--charcoal-grey);
-  animation: fade-in 0.3s ease forwards;
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  background-color: var(--warm-cream);
-  color: var(--white);
-  font-family: var(--font-body);
-  line-height: 1.6;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
 
 /* Header & Logo */
@@ -337,7 +309,7 @@ main {
 }
 
 /* Go Out / Stay In page shells */
-.page h2 {
+.page h1 {
   font-family: var(--font-heading);
   color: var(--white);
   margin-bottom: 0.5rem;
@@ -499,4 +471,51 @@ footer {
 .movie-description {
   font-size: 0.9rem;
   color: var(--white);
+}
+
+/* Read more / show less toggle on movie descriptions */
+.read-more-btn {
+  background: none;
+  border: none;
+  color: var(--antique-gold);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.25rem 0;
+  margin-top: 0.25rem;
+  text-decoration: underline;
+  align-self: flex-start;
+}
+
+.read-more-btn:hover,
+.read-more-btn:focus-visible {
+  color: var(--dusty-rose);
+}
+
+/* Watch-provider button on movie cards */
+.watch-btn {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+}
+
+.watch-providers {
+  margin-top: 0.5rem;
+}
+
+.providers-list {
+  font-size: 0.85rem;
+  color: var(--charcoal-grey);
+  animation: fade-in 0.3s ease forwards;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

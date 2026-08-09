@@ -6,9 +6,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   await displayTrending();
   wireSearch();
   wireWatchButtons();
+  wireReadMoreButtons();
 });
 
 function movieCardTemplate(movie) {
+  const fullDescription = movie.description || "No description provided.";
+  const isLong = fullDescription.length > 100;
+  const shortDescription = isLong ? `${fullDescription.substring(0, 100)}...` : fullDescription;
+
   return `
     <li class="movie-card">
       <div class="movie-image-wrapper">
@@ -19,9 +24,15 @@ function movieCardTemplate(movie) {
         <p class="movie-meta">
           <span>⭐ ${movie.rating}</span>
         </p>
-        <p class="movie-description">
-          ${movie.description ? movie.description.substring(0, 100) : "No description provided."}...
+        <p
+          class="movie-description"
+          data-full="${encodeURIComponent(fullDescription)}"
+          data-short="${encodeURIComponent(shortDescription)}"
+          data-expanded="false"
+        >
+          ${shortDescription}
         </p>
+        ${isLong ? '<button class="read-more-btn" type="button">Read more</button>' : ""}
         <button class="btn btn-accent watch-btn" data-id="${movie.id}" type="button">
           Where to Watch
         </button>
@@ -35,24 +46,16 @@ async function displayTrending() {
   const container = document.querySelector(".movie-list");
   if (!container) return;
 
-  container.innerHTML =
-    '<p style="color: var(--warm-cream);">Loading trending picks...</p>';
+  container.innerHTML = '<p style="color: var(--warm-cream);">Loading trending picks...</p>';
 
   const movies = await tmdbService.fetchTrending();
 
   if (!movies || movies.length === 0) {
-    container.innerHTML =
-      '<p class="no-results">No trending titles available right now.</p>';
+    container.innerHTML = '<p class="no-results">No trending titles available right now.</p>';
     return;
   }
 
-  renderListWithTemplate(
-    movieCardTemplate,
-    container,
-    movies,
-    "afterbegin",
-    true,
-  );
+  renderListWithTemplate(movieCardTemplate, container, movies, "afterbegin", true);
 }
 
 function wireSearch() {
@@ -79,9 +82,7 @@ function wireWatchButtons() {
     if (!btn) return;
 
     const id = btn.dataset.id;
-    const target = container.querySelector(
-      `.watch-providers[data-providers-for="${id}"]`,
-    );
+    const target = container.querySelector(`.watch-providers[data-providers-for="${id}"]`);
     if (!target) return;
 
     btn.disabled = true;
@@ -93,15 +94,42 @@ function wireWatchButtons() {
       if (providers && providers.length > 0) {
         target.innerHTML = `<p class="providers-list">📺 Stream on: ${providers.join(", ")}</p>`;
       } else {
-        target.innerHTML =
-          '<p class="providers-list">Not currently streaming — check theaters or rental.</p>';
+        target.innerHTML = '<p class="providers-list">Not currently streaming — check theaters or rental.</p>';
       }
     } catch (error) {
       console.error("Error loading providers:", error);
-      target.innerHTML =
-        '<p class="providers-list error-msg">Couldn\'t load streaming info.</p>';
+      target.innerHTML = '<p class="providers-list error-msg">Couldn\'t load streaming info.</p>';
     } finally {
       btn.remove();
+    }
+  });
+}
+
+// Event delegation on the list container: toggles between short and full
+// movie descriptions when a "Read more" / "Show less" button is clicked.
+function wireReadMoreButtons() {
+  const container = document.querySelector(".movie-list");
+  if (!container) return;
+
+  container.addEventListener("click", (event) => {
+    const btn = event.target.closest(".read-more-btn");
+    if (!btn) return;
+
+    const descriptionEl = btn.previousElementSibling;
+    if (!descriptionEl || !descriptionEl.classList.contains("movie-description")) return;
+
+    const isExpanded = descriptionEl.dataset.expanded === "true";
+    const full = decodeURIComponent(descriptionEl.dataset.full);
+    const short = decodeURIComponent(descriptionEl.dataset.short);
+
+    if (isExpanded) {
+      descriptionEl.textContent = short;
+      descriptionEl.dataset.expanded = "false";
+      btn.textContent = "Read more";
+    } else {
+      descriptionEl.textContent = full;
+      descriptionEl.dataset.expanded = "true";
+      btn.textContent = "Show less";
     }
   });
 }
@@ -125,16 +153,9 @@ async function handleSearch(query) {
       return;
     }
 
-    renderListWithTemplate(
-      movieCardTemplate,
-      container,
-      results,
-      "afterbegin",
-      true,
-    );
+    renderListWithTemplate(movieCardTemplate, container, results, "afterbegin", true);
   } catch (error) {
     console.error("Search failed:", error);
-    container.innerHTML =
-      '<p class="error-msg">Something went wrong searching. Try again.</p>';
+    container.innerHTML = '<p class="error-msg">Something went wrong searching. Try again.</p>';
   }
 }
