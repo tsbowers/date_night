@@ -25,6 +25,7 @@ function movieCardTemplate(movie) {
         <h3>${movie.title} ${movie.releaseYear ? `(${movie.releaseYear})` : ""}</h3>
         <p class="movie-meta">
           <span>⭐ ${movie.rating}</span>
+          ${movie.genreNames && movie.genreNames.length > 0 ? `<span class="movie-genres">${movie.genreNames.join(", ")}</span>` : ""}
         </p>
         <p
           class="movie-description"

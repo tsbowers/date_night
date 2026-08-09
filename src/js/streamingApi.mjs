@@ -4,19 +4,60 @@ const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
 const IMAGE_BASE = "https://image.tmdb.org/t/p/w500";
 const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600";
+const GENRE_CACHE_KEY = "tmdb_genre_map";
 
-
+ 
 export class TMDBService {
   constructor(apiKey) {
     this.apiKey = apiKey;
+    this.genreMap = null;
+  }
+
+  /**
+   * Fetches and caches the TMDB movie genre id -> name map. The map rarely
+   * changes, so it's cached in localStorage alongside other API responses.
+   * @returns {Promise<Record<number, string>>}
+   */
+  async #getGenreMap() {
+    if (this.genreMap) return this.genreMap;
+
+    const cached = getCachedData(GENRE_CACHE_KEY);
+    if (cached) {
+      this.genreMap = cached;
+      return cached;
+    }
+
+    const url = `${BASE_URL}/genre/movie/list?api_key=${this.apiKey}`;
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`TMDB genre list error: ${response.status}`);
+
+      const result = await response.json();
+      const map = {};
+      (result.genres || []).forEach((genre) => {
+        map[genre.id] = genre.name;
+      });
+
+      this.genreMap = map;
+      setCachedData(GENRE_CACHE_KEY, map);
+      return map;
+    } catch (error) {
+      console.error("Error fetching genre list:", error);
+      return {};
+    }
   }
 
   /**
    * Converts a raw TMDB movie object into the shape the UI expects.
    * @param {object} movie - raw TMDB movie/show result
+   * @param {Record<number, string>} genreMap - id -> name lookup
    * @returns {object} normalized movie record
    */
-  #normalizeMovie(movie) {
+  #normalizeMovie(movie, genreMap) {
+    const genreIds = movie.genre_ids || [];
+    const genreNames = genreIds.map((id) => genreMap[id]).filter(Boolean);
+
     return {
       id: movie.id,
       title: movie.title || movie.name || "Featured Title",
@@ -24,7 +65,8 @@ export class TMDBService {
       rating: movie.vote_average ? movie.vote_average.toFixed(1) : "N/A",
       voteCount: movie.vote_count ?? 0,
       popularity: movie.popularity ?? 0,
-      genreIds: movie.genre_ids || [],
+      genreIds,
+      genreNames,
       description: movie.overview || "No overview available.",
       image: movie.poster_path ? `${IMAGE_BASE}${movie.poster_path}` : FALLBACK_IMAGE,
     };
@@ -42,11 +84,11 @@ export class TMDBService {
     const url = `${BASE_URL}/trending/movie/week?api_key=${this.apiKey}`;
 
     try {
-      const response = await fetch(url);
+      const [response, genreMap] = await Promise.all([fetch(url), this.#getGenreMap()]);
       if (!response.ok) throw new Error(`TMDB trending error: ${response.status}`);
 
       const result = await response.json();
-      const movies = (result.results || []).map((movie) => this.#normalizeMovie(movie));
+      const movies = (result.results || []).map((movie) => this.#normalizeMovie(movie, genreMap));
 
       setCachedData(cacheKey, movies);
       return movies;
@@ -72,11 +114,11 @@ export class TMDBService {
     const url = `${BASE_URL}/search/movie?api_key=${this.apiKey}&query=${encodeURIComponent(trimmed)}`;
 
     try {
-      const response = await fetch(url);
+      const [response, genreMap] = await Promise.all([fetch(url), this.#getGenreMap()]);
       if (!response.ok) throw new Error(`TMDB search error: ${response.status}`);
 
       const result = await response.json();
-      const movies = (result.results || []).map((movie) => this.#normalizeMovie(movie));
+      const movies = (result.results || []).map((movie) => this.#normalizeMovie(movie, genreMap));
 
       setCachedData(cacheKey, movies);
       return movies;
@@ -115,5 +157,4 @@ export class TMDBService {
   }
 }
 
-// Single shared instance used throughout the app.
 export const tmdbService = new TMDBService(API_KEY);
