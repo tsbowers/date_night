@@ -1,4 +1,3 @@
-// src/js/streamingApi.mjs
 import { getCachedData, setCachedData } from "./utils.mjs";
 
 const RAPID_API_KEY = import.meta.env.VITE_RAPID_API_KEY;
@@ -12,7 +11,6 @@ const baseOptions = {
   },
 };
 
-// Normalize a raw API show object into what our templates expect
 function normalizeShow(show) {
   const usOptions = show.streamingOptions?.us || [];
   return {
@@ -29,7 +27,6 @@ function normalizeShow(show) {
   };
 }
 
-// Fetch trending/popular titles for the initial page load
 export async function fetchTrendingStreaming() {
   const cacheKey = "trending_streaming";
   const cached = getCachedData(cacheKey);
@@ -39,21 +36,30 @@ export async function fetchTrendingStreaming() {
 
   try {
     const response = await fetch(url, baseOptions);
+
+    if (response.status === 429) {
+      // Rate limited / quota exceeded on RapidAPI - don't retry, surface a clear signal
+      throw new Error("RATE_LIMITED");
+    }
     if (!response.ok) throw new Error(`Streaming API error: ${response.status}`);
 
     const result = await response.json();
+    console.log("RAW API RESPONSE (trending):", result);
     const rawShows = result.shows || result.result || [];
     const shows = rawShows.map(normalizeShow);
 
     setCachedData(cacheKey, shows);
     return shows;
   } catch (error) {
-    console.error("Error fetching trending streaming data:", error);
+    if (error.message === "RATE_LIMITED") {
+      console.warn("RapidAPI quota exceeded - showing fallback state.");
+    } else {
+      console.error("Error fetching trending streaming data:", error);
+    }
     return [];
   }
 }
 
-// Search by title — this is the new function for the "in" page search bar
 export async function searchStreamingByTitle(query) {
   if (!query || !query.trim()) return [];
 
@@ -72,21 +78,29 @@ export async function searchStreamingByTitle(query) {
 
   try {
     const response = await fetch(url, baseOptions);
+
+    if (response.status === 429) {
+      throw new Error("RATE_LIMITED");
+    }
     if (!response.ok) throw new Error(`Streaming search error: ${response.status}`);
 
     const result = await response.json();
+    console.log("RAW API RESPONSE (search):", result);
     const rawShows = Array.isArray(result) ? result : result.shows || result.result || [];
     const shows = rawShows.map(normalizeShow);
 
     setCachedData(cacheKey, shows);
     return shows;
   } catch (error) {
-    console.error("Error searching streaming titles:", error);
+    if (error.message === "RATE_LIMITED") {
+      console.warn("RapidAPI quota exceeded during search.");
+    } else {
+      console.error("Error searching streaming titles:", error);
+    }
     return [];
   }
 }
 
-// Fetch a single show/movie by id — matches the curl endpoint you shared
 export async function fetchShowById(id, type = "movie") {
   const cacheKey = `show_${type}_${id}`;
   const cached = getCachedData(cacheKey);
@@ -96,6 +110,10 @@ export async function fetchShowById(id, type = "movie") {
 
   try {
     const response = await fetch(url, baseOptions);
+
+    if (response.status === 429) {
+      throw new Error("RATE_LIMITED");
+    }
     if (!response.ok) throw new Error(`Show lookup error: ${response.status}`);
 
     const result = await response.json();
@@ -104,7 +122,11 @@ export async function fetchShowById(id, type = "movie") {
     setCachedData(cacheKey, show);
     return show;
   } catch (error) {
-    console.error("Error fetching show by id:", error);
+    if (error.message === "RATE_LIMITED") {
+      console.warn("RapidAPI quota exceeded during show lookup.");
+    } else {
+      console.error("Error fetching show by id:", error);
+    }
     return null;
   }
 }

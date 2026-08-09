@@ -35,7 +35,8 @@ async function displayTrending() {
   const movies = await fetchTrendingStreaming();
 
   if (!movies || movies.length === 0) {
-    container.innerHTML = '<p class="no-results">No trending titles available right now.</p>';
+    container.innerHTML =
+      '<p class="no-results">We\'ve hit our streaming API quota for now — try searching directly, or check back soon.</p>';
     return;
   }
 
