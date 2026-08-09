@@ -1,13 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&display=swap");
 
 :root {
-  /* Palette from the project proposal */
-  --deep-plum: #3a2e39; /* headers, primary text, nav bg */
-  --dusty-rose: #b75d69; /* primary accent, buttons, active filters */
-  --warm-cream: #fbf3ef; /* page and card backgrounds */
-  --antique-gold: #c9a227; /* dividers, small accents */
-  --charcoal-grey: #6b6b6b; /* secondary / meta text */
-  --white: #ffffff;
+  /* Updated palette sampled directly from the provided UI image */
+  --deep-plum: #2c3238;     /* Dark slate/charcoal for cards, header, and footer */
+  --dusty-rose: #9e4753;    /* Mauve/rose for Stay In badge & accent buttons */
+  --warm-cream: #28150c;    /* Deep espresso brown for the main body background */
+  --antique-gold: #c29828;  /* Gold/ochre for Go Out badge, logo title, & main buttons */
+  --charcoal-grey: #b0b0b0; /* Secondary/meta text on dark backgrounds */
+  --white: #eaeaea;         /* Off-white text for general body/headings */
 
   --font-heading: "Playfair Display", Georgia, serif;
   --font-body: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -21,7 +21,7 @@
 
 body {
   background-color: var(--warm-cream);
-  color: var(--deep-plum);
+  color: var(--white);
   font-family: var(--font-body);
   line-height: 1.6;
   min-height: 100vh;
@@ -32,7 +32,7 @@ body {
 /* Header & Logo */
 header {
   background-color: var(--deep-plum);
-  color: var(--warm-cream);
+  color: var(--white);
   padding: 0.75rem 2rem;
   display: flex;
   justify-content: space-between;
@@ -63,7 +63,7 @@ header {
 }
 
 nav a {
-  color: var(--warm-cream);
+  color: var(--white);
   text-decoration: none;
   margin-left: 1.5rem;
   font-weight: 500;
@@ -97,7 +97,7 @@ main {
 
 .page-intro h1 {
   font-family: var(--font-heading);
-  color: var(--deep-plum);
+  color: var(--white);
   font-size: 2.2rem;
   margin-bottom: 0.5rem;
 }
@@ -123,10 +123,13 @@ main {
   border-radius: 14px;
   width: 100%;
   overflow: hidden;
-  box-shadow: 0 8px 20px rgba(58, 46, 57, 0.35);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
   text-align: center;
   opacity: 0;
   animation: spotlight-in 0.6s ease forwards;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .out-spotlight {
@@ -146,7 +149,7 @@ main {
   background: conic-gradient(
     from 0deg,
     transparent 0deg,
-    rgba(201, 162, 39, 0.4) 25deg,
+    rgba(194, 152, 40, 0.3) 25deg,
     transparent 70deg,
     transparent 360deg
   );
@@ -158,7 +161,7 @@ main {
   background: conic-gradient(
     from 0deg,
     transparent 0deg,
-    rgba(183, 93, 105, 0.45) 25deg,
+    rgba(158, 71, 83, 0.35) 25deg,
     transparent 70deg,
     transparent 360deg
   );
@@ -167,20 +170,14 @@ main {
 .spotlight-card:hover,
 .spotlight-card:focus-within {
   transform: translateY(-6px);
-  box-shadow: 0 14px 28px rgba(58, 46, 57, 0.45);
-}
-
-.spotlight-card {
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.55);
 }
 
 .spotlight-badge {
   position: relative;
   z-index: 1;
   background-color: var(--antique-gold);
-  color: var(--deep-plum);
+  color: var(--warm-cream);
   font-family: var(--font-heading);
   text-transform: uppercase;
   font-weight: bold;
@@ -191,7 +188,7 @@ main {
 
 .in-spotlight .spotlight-badge {
   background-color: var(--dusty-rose);
-  color: var(--warm-cream);
+  color: var(--white);
 }
 
 .spotlight-content {
@@ -210,13 +207,13 @@ main {
 
 .spotlight-content h3 {
   font-family: var(--font-heading);
-  color: var(--warm-cream);
+  color: var(--white);
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
 }
 
 .spotlight-content p {
-  color: rgba(251, 243, 239, 0.85);
+  color: var(--charcoal-grey);
 }
 
 @keyframes spotlight-in {
@@ -253,7 +250,7 @@ main {
 .btn {
   display: inline-block;
   background-color: var(--antique-gold);
-  color: var(--deep-plum);
+  color: var(--warm-cream);
   padding: 0.75rem 1.5rem;
   border-radius: 6px;
   text-decoration: none;
@@ -268,23 +265,23 @@ main {
 
 .btn:hover {
   background-color: var(--dusty-rose);
-  color: var(--warm-cream);
+  color: var(--white);
 }
 
 .btn-accent {
   background-color: var(--dusty-rose);
-  color: var(--warm-cream);
+  color: var(--white);
 }
 
 .btn-accent:hover {
   background-color: var(--antique-gold);
-  color: var(--deep-plum);
+  color: var(--warm-cream);
 }
 
 /* Go Out / Stay In page shells */
 .page h2 {
   font-family: var(--font-heading);
-  color: var(--deep-plum);
+  color: var(--white);
   margin-bottom: 0.5rem;
 }
 
@@ -296,7 +293,7 @@ main {
 /* Footer */
 footer {
   background-color: var(--deep-plum);
-  color: var(--warm-cream);
+  color: var(--white);
   text-align: center;
   padding: 1.25rem;
   margin-top: auto;
@@ -311,7 +308,7 @@ footer {
 }
 
 .event-card {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: var(--deep-plum);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   overflow: hidden;
@@ -335,7 +332,7 @@ footer {
   top: 10px;
   right: 10px;
   background-color: rgba(0, 0, 0, 0.7);
-  color: #fff;
+  color: var(--white);
   padding: 4px 10px;
   border-radius: 20px;
   font-size: 0.8rem;
@@ -351,11 +348,12 @@ footer {
 .event-details h3 {
   margin: 0 0 8px 0;
   font-size: 1.2rem;
+  color: var(--white);
 }
 
 .event-meta {
   font-size: 0.85rem;
-  opacity: 0.8;
+  color: var(--charcoal-grey);
   margin-bottom: 12px;
 }
 
@@ -363,4 +361,5 @@ footer {
   font-size: 0.9rem;
   flex-grow: 1;
   margin-bottom: 16px;
+  color: var(--white);
 }
