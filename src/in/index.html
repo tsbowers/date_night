@@ -15,8 +15,18 @@
     <main class="page page--in">
       <h2>Stay In</h2>
       <p class="page__intro">
-        Browse trending movies and shows and see where to stream them.
+        Browse trending movies and shows, or search for something specific to stream.
       </p>
+
+      <div class="search-bar">
+        <input
+          type="text"
+          id="movie-search-input"
+          placeholder="Search for a movie or show..."
+          aria-label="Search for a movie or show"
+        />
+        <button id="movie-search-btn" class="btn btn-accent" type="button">Search</button>
+      </div>
 
       <ul class="movie-list"></ul>
     </main>
