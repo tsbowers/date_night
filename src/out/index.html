@@ -3,28 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Go Out - Date Night Planner</title>
+    <meta
+      name="description"
+      content="Browse local events near you — concerts, dining, and shows — powered by the Ticketmaster Discovery API."
+    />
+    <title>Go Out | Date Night Planner</title>
     <link rel="icon" type="image/png" href="/images/logo.jpg" />
     <link rel="stylesheet" href="/css/style.css" />
     <script type="module" src="/js/out.js"></script>
   </head>
   <body>
-    <!-- Target container for header partial -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <header id="main-header"></header>
 
-    <main>
+    <main id="main-content" class="page page--out">
       <section class="page-intro">
         <h1>Go Out</h1>
         <p>Browse local events happening near you.</p>
       </section>
 
       <!-- Container where events will be dynamically inserted -->
-      <section id="events-grid" class="events-grid">
-        <p style="color: var(--warm-cream);">Loading local events...</p>
+      <section id="events-grid" class="events-grid" aria-live="polite">
+        <p style="color: var(--warm-cream)">Loading local events...</p>
       </section>
     </main>
 
-    <!-- Target container for footer partial -->
     <footer id="main-footer"></footer>
   </body>
 </html>

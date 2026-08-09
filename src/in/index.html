@@ -3,32 +3,43 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Date Night Planner | Stay In</title>
+    <meta
+      name="description"
+      content="Discover trending movies and search for titles to stream tonight, powered by The Movie Database API."
+    />
+    <title>Stay In | Date Night Planner</title>
     <link rel="icon" type="image/png" href="/images/logo.jpg" />
     <link rel="stylesheet" href="/css/style.css" />
     <script type="module" src="/js/in.js"></script>
   </head>
 
   <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <header id="main-header"></header>
 
-    <main class="page page--in">
-      <h2>Stay In</h2>
+    <main id="main-content" class="page page--in">
+      <h1>Stay In</h1>
       <p class="page__intro">
-        Browse trending movies and shows, or search for something specific to stream.
+        Browse trending movies and shows, or search for something specific to
+        stream.
       </p>
 
-      <div class="search-bar">
+      <form class="search-bar" role="search" onsubmit="return false;">
+        <label for="movie-search-input" class="visually-hidden"
+          >Search for a movie or show</label
+        >
         <input
           type="text"
           id="movie-search-input"
           placeholder="Search for a movie or show..."
-          aria-label="Search for a movie or show"
         />
-        <button id="movie-search-btn" class="btn btn-accent" type="button">Search</button>
-      </div>
+        <button id="movie-search-btn" class="btn btn-accent" type="button">
+          Search
+        </button>
+      </form>
 
-      <ul class="movie-list"></ul>
+      <ul class="movie-list" aria-live="polite"></ul>
     </main>
 
     <footer id="main-footer"></footer>

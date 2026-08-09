@@ -2,15 +2,73 @@
 
 :root {
   /* Updated palette sampled directly from the provided UI image */
-  --deep-plum: #2c3238;     /* Dark slate/charcoal for cards, header, and footer */
-  --dusty-rose: #9e4753;    /* Mauve/rose for Stay In badge & accent buttons */
-  --warm-cream: #28150c;    /* Deep espresso brown for the main body background */
-  --antique-gold: #c29828;  /* Gold/ochre for Go Out badge, logo title, & main buttons */
+  --deep-plum: #2c3238; /* Dark slate/charcoal for cards, header, and footer */
+  --dusty-rose: #9e4753; /* Mauve/rose for Stay In badge & accent buttons */
+  --warm-cream: #28150c; /* Deep espresso brown for the main body background */
+  --antique-gold: #c29828; /* Gold/ochre for Go Out badge, logo title, & main buttons */
   --charcoal-grey: #b0b0b0; /* Secondary/meta text on dark backgrounds */
-  --white: #eaeaea;         /* Off-white text for general body/headings */
+  --white: #eaeaea; /* Off-white text for general body/headings */
 
   --font-heading: "Playfair Display", Georgia, serif;
   --font-body: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* Accessibility utilities */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background-color: var(--antique-gold);
+  color: var(--warm-cream);
+  padding: 0.75rem 1.25rem;
+  z-index: 100;
+  border-radius: 0 0 6px 0;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Watch-provider button on movie cards */
+.watch-btn {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+}
+
+.watch-providers {
+  margin-top: 0.5rem;
+}
+
+.providers-list {
+  font-size: 0.85rem;
+  color: var(--charcoal-grey);
+  animation: fade-in 0.3s ease forwards;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 * {

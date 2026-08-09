@@ -30,13 +30,7 @@ export function setCachedData(key, data) {
 }
 
 // render a list of items into a parent element using a template function
-export function renderListWithTemplate(
-  templateFn,
-  parentElement,
-  list,
-  position = "afterbegin",
-  clear = false,
-) {
+export function renderListWithTemplate(templateFn, parentElement, list, position = "afterbegin", clear = false) {
   const htmlStrings = list.map(templateFn);
   if (clear) {
     parentElement.innerHTML = "";
@@ -82,4 +76,34 @@ export function formatCurrency(value) {
     style: "currency",
     currency: "USD",
   }).format(value);
+}
+
+/**
+ * Requests the user's current GPS coordinates via the Geolocation API.
+ * Resolves to null (rather than rejecting) if geolocation is unsupported,
+ * denied, or times out, so callers can always fall back gracefully.
+ * @returns {Promise<{lat: number, lon: number} | null>}
+ */
+export function getUserLocation() {
+  return new Promise((resolve) => {
+    if (!navigator.geolocation) {
+      console.warn("Geolocation is not supported by this browser.");
+      resolve(null);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        resolve({
+          lat: position.coords.latitude,
+          lon: position.coords.longitude,
+        });
+      },
+      (error) => {
+        console.warn("Geolocation access denied or failed:", error.message);
+        resolve(null);
+      },
+      { timeout: 8000 },
+    );
+  });
 }
