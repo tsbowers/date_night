@@ -1,18 +1,16 @@
-// src/js/streamingApi.mjs
 import { getCachedData, setCachedData } from "./utils.mjs";
 
-const TMDB_KEY = import.meta.env.VITE_TMDB_API_KEY;
+const TMDB_KEY = "2c391eb580ae9c675f52652d3e2bce91";
 const BASE_URL = "https://api.themoviedb.org/3";
 const IMAGE_BASE = "https://image.tmdb.org/t/p/w500";
 
-// Normalize a raw TMDB movie object into what our templates expect
 function normalizeMovie(movie) {
   return {
     id: movie.id,
     title: movie.title || movie.name || "Featured Title",
     releaseYear: (movie.release_date || movie.first_air_date || "").slice(0, 4) || "N/A",
     rating: movie.vote_average ? movie.vote_average.toFixed(1) : "N/A",
-    streamingPlatform: "Check availability", // filled in by fetchWatchProviders when needed
+    streamingPlatform: "Check availability",
     description: movie.overview || "No overview available.",
     image: movie.poster_path
       ? `${IMAGE_BASE}${movie.poster_path}`
@@ -20,7 +18,6 @@ function normalizeMovie(movie) {
   };
 }
 
-// Fetch trending movies for the initial page load
 export async function fetchTrendingStreaming() {
   const cacheKey = "trending_streaming";
   const cached = getCachedData(cacheKey);
@@ -43,7 +40,6 @@ export async function fetchTrendingStreaming() {
   }
 }
 
-// Search by title
 export async function searchStreamingByTitle(query) {
   if (!query || !query.trim()) return [];
 
@@ -68,7 +64,6 @@ export async function searchStreamingByTitle(query) {
   }
 }
 
-// Optional: fetch which streaming services (US) carry a specific movie by id
 export async function fetchWatchProviders(id) {
   const cacheKey = `providers_${id}`;
   const cached = getCachedData(cacheKey);
