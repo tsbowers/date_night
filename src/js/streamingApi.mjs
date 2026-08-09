@@ -5,8 +5,8 @@ const BASE_URL = "https://api.themoviedb.org/3";
 const IMAGE_BASE = "https://image.tmdb.org/t/p/w500";
 const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600";
 const GENRE_CACHE_KEY = "tmdb_genre_map";
+const CACHE_VERSION = "v2";
 
- 
 export class TMDBService {
   constructor(apiKey) {
     this.apiKey = apiKey;
@@ -77,7 +77,7 @@ export class TMDBService {
    * @returns {Promise<object[]>}
    */
   async fetchTrending() {
-    const cacheKey = "trending_streaming";
+    const cacheKey = `trending_streaming_${CACHE_VERSION}`;
     const cached = getCachedData(cacheKey);
     if (cached) return cached;
 
@@ -107,7 +107,7 @@ export class TMDBService {
     if (!query || !query.trim()) return [];
 
     const trimmed = query.trim();
-    const cacheKey = `search_${trimmed.toLowerCase()}`;
+    const cacheKey = `search_${CACHE_VERSION}_${trimmed.toLowerCase()}`;
     const cached = getCachedData(cacheKey);
     if (cached) return cached;
 
