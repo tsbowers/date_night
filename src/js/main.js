@@ -19,7 +19,7 @@ async function loadOutSpotlight(target) {
   if (!target) return;
 
   target.innerHTML =
-    '<p style="color: var(--warm-cream);">Loading local event spotlight...</p>';
+    "<p style=\"color: var(--warm-cream);\">Loading local event spotlight...</p>";
 
   const userCoords = await getUserLocation();
   const events = userCoords
@@ -53,7 +53,7 @@ async function loadInSpotlight(target) {
   if (!target) return;
 
   target.innerHTML =
-    '<p style="color: var(--warm-cream);">Loading streaming spotlight...</p>';
+    "<p style=\"color: var(--warm-cream);\">Loading streaming spotlight...</p>";
 
   const movies = await tmdbService.fetchTrending();
 

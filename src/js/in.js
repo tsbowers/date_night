@@ -34,7 +34,7 @@ function movieCardTemplate(movie) {
         >
           ${shortDescription}
         </p>
-        ${isLong ? '<button class="read-more-btn" type="button">Read more</button>' : ""}
+        ${isLong ? "<button class=\"read-more-btn\" type=\"button\">Read more</button>" : ""}
         <button class="btn btn-accent watch-btn" data-id="${movie.id}" type="button">
           Where to Watch
         </button>
@@ -49,13 +49,13 @@ async function displayTrending() {
   if (!container) return;
 
   container.innerHTML =
-    '<p style="color: var(--warm-cream);">Loading trending picks...</p>';
+    "<p style=\"color: var(--warm-cream);\">Loading trending picks...</p>";
 
   const movies = await tmdbService.fetchTrending();
 
   if (!movies || movies.length === 0) {
     container.innerHTML =
-      '<p class="no-results">No trending titles available right now.</p>';
+      "<p class=\"no-results\">No trending titles available right now.</p>";
     return;
   }
 
@@ -107,12 +107,12 @@ function wireWatchButtons() {
         target.innerHTML = `<p class="providers-list">📺 Stream on: ${providers.join(", ")}</p>`;
       } else {
         target.innerHTML =
-          '<p class="providers-list">Not currently streaming — check theaters or rental.</p>';
+          "<p class=\"providers-list\">Not currently streaming — check theaters or rental.</p>";
       }
     } catch (error) {
       console.error("Error loading providers:", error);
       target.innerHTML =
-        '<p class="providers-list error-msg">Couldn\'t load streaming info.</p>';
+        "<p class=\"providers-list error-msg\">Couldn't load streaming info.</p>";
     } finally {
       btn.remove();
     }
@@ -161,7 +161,7 @@ async function handleSearch(query) {
     return;
   }
 
-  container.innerHTML = '<p style="color: var(--warm-cream);">Searching...</p>';
+  container.innerHTML = "<p style=\"color: var(--warm-cream);\">Searching...</p>";
 
   try {
     const results = await tmdbService.searchByTitle(query);
@@ -181,6 +181,6 @@ async function handleSearch(query) {
   } catch (error) {
     console.error("Search failed:", error);
     container.innerHTML =
-      '<p class="error-msg">Something went wrong searching. Try again.</p>';
+      "<p class=\"error-msg\">Something went wrong searching. Try again.</p>";
   }
 }

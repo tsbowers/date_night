@@ -5,11 +5,7 @@ const BASE_URL = "https://api.themoviedb.org/3";
 const IMAGE_BASE = "https://image.tmdb.org/t/p/w500";
 const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600";
 
-/**
- * Wraps calls to The Movie Database (TMDB) API: trending titles, title
- * search, and per-title watch-provider lookups. Results are cached in
- * localStorage (see utils.mjs) to avoid duplicate network requests.
- */
+
 export class TMDBService {
   constructor(apiKey) {
     this.apiKey = apiKey;
@@ -26,6 +22,9 @@ export class TMDBService {
       title: movie.title || movie.name || "Featured Title",
       releaseYear: (movie.release_date || movie.first_air_date || "").slice(0, 4) || "N/A",
       rating: movie.vote_average ? movie.vote_average.toFixed(1) : "N/A",
+      voteCount: movie.vote_count ?? 0,
+      popularity: movie.popularity ?? 0,
+      genreIds: movie.genre_ids || [],
       description: movie.overview || "No overview available.",
       image: movie.poster_path ? `${IMAGE_BASE}${movie.poster_path}` : FALLBACK_IMAGE,
     };

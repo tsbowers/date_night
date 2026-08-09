@@ -39,7 +39,7 @@ async function displayEvents() {
   if (!container) return;
 
   container.innerHTML =
-    '<p style="color: var(--warm-cream);">Detecting your location...</p>';
+    "<p style=\"color: var(--warm-cream);\">Detecting your location...</p>";
 
   try {
     const userCoords = await getUserLocation();
@@ -54,7 +54,7 @@ async function displayEvents() {
 
     if (!events || events.length === 0) {
       container.innerHTML =
-        '<p class="no-results">No local events found in your area right now.</p>';
+        "<p class=\"no-results\">No local events found in your area right now.</p>";
       return;
     }
 
@@ -68,6 +68,6 @@ async function displayEvents() {
   } catch (error) {
     console.error("Error rendering events page:", error);
     container.innerHTML =
-      '<p class="error-msg">Failed to load local events.</p>';
+      "<p class=\"error-msg\">Failed to load local events.</p>";
   }
 }
