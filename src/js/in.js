@@ -12,7 +12,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 function movieCardTemplate(movie) {
   const fullDescription = movie.description || "No description provided.";
   const isLong = fullDescription.length > 100;
-  const shortDescription = isLong ? `${fullDescription.substring(0, 100)}...` : fullDescription;
+  const shortDescription = isLong
+    ? `${fullDescription.substring(0, 100)}...`
+    : fullDescription;
 
   return `
     <li class="movie-card">
@@ -46,16 +48,24 @@ async function displayTrending() {
   const container = document.querySelector(".movie-list");
   if (!container) return;
 
-  container.innerHTML = '<p style="color: var(--warm-cream);">Loading trending picks...</p>';
+  container.innerHTML =
+    '<p style="color: var(--warm-cream);">Loading trending picks...</p>';
 
   const movies = await tmdbService.fetchTrending();
 
   if (!movies || movies.length === 0) {
-    container.innerHTML = '<p class="no-results">No trending titles available right now.</p>';
+    container.innerHTML =
+      '<p class="no-results">No trending titles available right now.</p>';
     return;
   }
 
-  renderListWithTemplate(movieCardTemplate, container, movies, "afterbegin", true);
+  renderListWithTemplate(
+    movieCardTemplate,
+    container,
+    movies,
+    "afterbegin",
+    true,
+  );
 }
 
 function wireSearch() {
@@ -82,7 +92,9 @@ function wireWatchButtons() {
     if (!btn) return;
 
     const id = btn.dataset.id;
-    const target = container.querySelector(`.watch-providers[data-providers-for="${id}"]`);
+    const target = container.querySelector(
+      `.watch-providers[data-providers-for="${id}"]`,
+    );
     if (!target) return;
 
     btn.disabled = true;
@@ -94,11 +106,13 @@ function wireWatchButtons() {
       if (providers && providers.length > 0) {
         target.innerHTML = `<p class="providers-list">📺 Stream on: ${providers.join(", ")}</p>`;
       } else {
-        target.innerHTML = '<p class="providers-list">Not currently streaming — check theaters or rental.</p>';
+        target.innerHTML =
+          '<p class="providers-list">Not currently streaming — check theaters or rental.</p>';
       }
     } catch (error) {
       console.error("Error loading providers:", error);
-      target.innerHTML = '<p class="providers-list error-msg">Couldn\'t load streaming info.</p>';
+      target.innerHTML =
+        '<p class="providers-list error-msg">Couldn\'t load streaming info.</p>';
     } finally {
       btn.remove();
     }
@@ -116,7 +130,11 @@ function wireReadMoreButtons() {
     if (!btn) return;
 
     const descriptionEl = btn.previousElementSibling;
-    if (!descriptionEl || !descriptionEl.classList.contains("movie-description")) return;
+    if (
+      !descriptionEl ||
+      !descriptionEl.classList.contains("movie-description")
+    )
+      return;
 
     const isExpanded = descriptionEl.dataset.expanded === "true";
     const full = decodeURIComponent(descriptionEl.dataset.full);
@@ -153,9 +171,16 @@ async function handleSearch(query) {
       return;
     }
 
-    renderListWithTemplate(movieCardTemplate, container, results, "afterbegin", true);
+    renderListWithTemplate(
+      movieCardTemplate,
+      container,
+      results,
+      "afterbegin",
+      true,
+    );
   } catch (error) {
     console.error("Search failed:", error);
-    container.innerHTML = '<p class="error-msg">Something went wrong searching. Try again.</p>';
+    container.innerHTML =
+      '<p class="error-msg">Something went wrong searching. Try again.</p>';
   }
 }
