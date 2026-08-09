@@ -1,65 +1,49 @@
+// src/js/streamingApi.mjs
 import { getCachedData, setCachedData } from "./utils.mjs";
 
-const RAPID_API_KEY = import.meta.env.VITE_RAPID_API_KEY;
-const HOST = "streaming-availability.p.rapidapi.com";
+const TMDB_KEY = import.meta.env.VITE_TMDB_API_KEY;
+const BASE_URL = "https://api.themoviedb.org/3";
+const IMAGE_BASE = "https://image.tmdb.org/t/p/w500";
 
-const baseOptions = {
-  method: "GET",
-  headers: {
-    "x-rapidapi-key": RAPID_API_KEY,
-    "x-rapidapi-host": HOST,
-  },
-};
-
-function normalizeShow(show) {
-  const usOptions = show.streamingOptions?.us || [];
+// Normalize a raw TMDB movie object into what our templates expect
+function normalizeMovie(movie) {
   return {
-    id: show.id || String(Math.random()),
-    title: show.title || "Featured Title",
-    releaseYear: show.releaseYear || show.firstAirYear || "N/A",
-    rating: show.rating ? (show.rating / 10).toFixed(1) : "N/A",
-    streamingPlatform: usOptions[0]?.service?.name || "Multiple Platforms",
-    description: show.overview || "No overview available.",
-    image:
-      show.imageSet?.verticalPoster?.w360 ||
-      show.imageSet?.verticalPoster?.w240 ||
-      "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600",
+    id: movie.id,
+    title: movie.title || movie.name || "Featured Title",
+    releaseYear: (movie.release_date || movie.first_air_date || "").slice(0, 4) || "N/A",
+    rating: movie.vote_average ? movie.vote_average.toFixed(1) : "N/A",
+    streamingPlatform: "Check availability", // filled in by fetchWatchProviders when needed
+    description: movie.overview || "No overview available.",
+    image: movie.poster_path
+      ? `${IMAGE_BASE}${movie.poster_path}`
+      : "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600",
   };
 }
 
+// Fetch trending movies for the initial page load
 export async function fetchTrendingStreaming() {
   const cacheKey = "trending_streaming";
   const cached = getCachedData(cacheKey);
   if (cached) return cached;
 
-  const url = `https://${HOST}/shows/search/filters?country=us&series_granularity=show&order_by=popularity_alltime&desc=true&output_language=en`;
+  const url = `${BASE_URL}/trending/movie/week?api_key=${TMDB_KEY}`;
 
   try {
-    const response = await fetch(url, baseOptions);
-
-    if (response.status === 429) {
-      // Rate limited / quota exceeded on RapidAPI - don't retry, surface a clear signal
-      throw new Error("RATE_LIMITED");
-    }
-    if (!response.ok) throw new Error(`Streaming API error: ${response.status}`);
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`TMDB trending error: ${response.status}`);
 
     const result = await response.json();
-    console.log("RAW API RESPONSE (trending):", result);
-    const rawShows = result.shows || result.result || [];
-    const shows = rawShows.map(normalizeShow);
+    const movies = (result.results || []).map(normalizeMovie);
 
-    setCachedData(cacheKey, shows);
-    return shows;
+    setCachedData(cacheKey, movies);
+    return movies;
   } catch (error) {
-    if (error.message === "RATE_LIMITED") {
-      console.warn("RapidAPI quota exceeded - showing fallback state.");
-    } else {
-      console.error("Error fetching trending streaming data:", error);
-    }
+    console.error("Error fetching trending movies:", error);
     return [];
   }
 }
 
+// Search by title
 export async function searchStreamingByTitle(query) {
   if (!query || !query.trim()) return [];
 
@@ -67,66 +51,43 @@ export async function searchStreamingByTitle(query) {
   const cached = getCachedData(cacheKey);
   if (cached) return cached;
 
-  const queryParams = new URLSearchParams({
-    title: query.trim(),
-    country: "us",
-    series_granularity: "show",
-    output_language: "en",
-  });
-
-  const url = `https://${HOST}/shows/search/title?${queryParams.toString()}`;
+  const url = `${BASE_URL}/search/movie?api_key=${TMDB_KEY}&query=${encodeURIComponent(query.trim())}`;
 
   try {
-    const response = await fetch(url, baseOptions);
-
-    if (response.status === 429) {
-      throw new Error("RATE_LIMITED");
-    }
-    if (!response.ok) throw new Error(`Streaming search error: ${response.status}`);
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`TMDB search error: ${response.status}`);
 
     const result = await response.json();
-    console.log("RAW API RESPONSE (search):", result);
-    const rawShows = Array.isArray(result) ? result : result.shows || result.result || [];
-    const shows = rawShows.map(normalizeShow);
+    const movies = (result.results || []).map(normalizeMovie);
 
-    setCachedData(cacheKey, shows);
-    return shows;
+    setCachedData(cacheKey, movies);
+    return movies;
   } catch (error) {
-    if (error.message === "RATE_LIMITED") {
-      console.warn("RapidAPI quota exceeded during search.");
-    } else {
-      console.error("Error searching streaming titles:", error);
-    }
+    console.error("Error searching movies:", error);
     return [];
   }
 }
 
-export async function fetchShowById(id, type = "movie") {
-  const cacheKey = `show_${type}_${id}`;
+// Optional: fetch which streaming services (US) carry a specific movie by id
+export async function fetchWatchProviders(id) {
+  const cacheKey = `providers_${id}`;
   const cached = getCachedData(cacheKey);
   if (cached) return cached;
 
-  const url = `https://${HOST}/shows/${type}/${id}`;
+  const url = `${BASE_URL}/movie/${id}/watch/providers?api_key=${TMDB_KEY}`;
 
   try {
-    const response = await fetch(url, baseOptions);
-
-    if (response.status === 429) {
-      throw new Error("RATE_LIMITED");
-    }
-    if (!response.ok) throw new Error(`Show lookup error: ${response.status}`);
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`TMDB providers error: ${response.status}`);
 
     const result = await response.json();
-    const show = normalizeShow(result);
+    const usProviders = result.results?.US?.flatrate || [];
+    const names = usProviders.map((p) => p.provider_name);
 
-    setCachedData(cacheKey, show);
-    return show;
+    setCachedData(cacheKey, names);
+    return names;
   } catch (error) {
-    if (error.message === "RATE_LIMITED") {
-      console.warn("RapidAPI quota exceeded during show lookup.");
-    } else {
-      console.error("Error fetching show by id:", error);
-    }
-    return null;
+    console.error("Error fetching watch providers:", error);
+    return [];
   }
 }
